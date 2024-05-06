@@ -4,23 +4,19 @@ import { UpdateListDto } from './dto/update-list.dto';
 
 @Injectable()
 export class ListService {
-  create(createListDto: CreateListDto) {
-    return 'This action adds a new list';
+  createList(createListDto: CreateListDto) {
+    return createListDto;
   }
 
-  findAll() {
-    return `This action returns all list`;
-  }
-
-  findOne(id: number) {
+  retrieveList(id: string) {
     return `This action returns a #${id} list`;
   }
 
-  update(id: number, updateListDto: UpdateListDto) {
-    return `This action updates a #${id} list`;
+  updateList(id: string, updateListDto: UpdateListDto) {
+    return `This action updates a #${id} list ${updateListDto}`;
   }
 
-  remove(id: number) {
+  deleteList(id: string) {
     return `This action removes a #${id} list`;
   }
 }
