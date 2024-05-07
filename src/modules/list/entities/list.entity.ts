@@ -1,1 +1,5 @@
-export class List {}
+export class List {
+  listId: string;
+  listName: string;
+  isShared: boolean;
+}

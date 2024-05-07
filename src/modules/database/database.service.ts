@@ -4,25 +4,32 @@ import * as path from 'path';
 
 @Injectable()
 export class DatabaseService {
-  private static db: any;
-  private static readonly PATH: string = path.join(
-    process.cwd(),
-    './src/modules/database/db.json'
-  );
+  private db: object;
+  private readonly PATH: string = path.join(process.cwd(), './src/modules/database/db.json');
 
-  public static init(): void {
-    this.db = JSON.parse(fs.readFileSync(this.PATH, 'utf8'));
+  constructor() {
+    this.init();
   }
 
-  public static getData(): any {
+  private init(): void {
+    try {
+      const data = fs.readFileSync(this.PATH, 'utf8');
+      this.db = JSON.parse(data);
+    } catch (error) {
+      console.error('Error initializing database:', error.message);
+      this.db = {};
+    }
+  }
+
+  public getData(): any {
     return this.db;
   }
 
-  public static setData(data: any): void {
+  public setData(data: any): void {
     this.db = data;
   }
 
-  public static save(): void {
+  public save(): void {
     fs.writeFileSync(this.PATH, JSON.stringify(this.db), 'utf8');
   }
 }
