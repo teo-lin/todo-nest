@@ -8,22 +8,22 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('register')
-  async createUser(@Body() createUserDto: CreateUserDto) {
-    return await this.userService.createUser(createUserDto);
+  createUser(@Body() createUserDto: CreateUserDto) {
+    return this.userService.createUser(createUserDto);
   }
 
   @Get('user/:id')
-  async retrieveUser(@Param('id') id: string) {
-    return await this.userService.retrieveUser(id);
+  retrieveUser(@Param('id') id: string) {
+    return this.userService.retrieveUser(id);
   }
 
   @Put('user/:id')
-  async updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return await this.userService.updateUser(id, updateUserDto);
+  updateUser(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.userService.updateUser(id, updateUserDto);
   }
 
   @Delete('user/:id')
-  async deleteUser(@Param('id') id: string) {
-    return await this.userService.deleteUser(id);
+  deleteUser(@Param('id') id: string) {
+    return this.userService.deleteUser(id);
   }
 }
