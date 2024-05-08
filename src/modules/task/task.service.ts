@@ -46,7 +46,7 @@ export class TaskService {
     const data = this.databaseService.getData();
     const taskIndex = data.tasks.findIndex((task: Task) => task.taskId === taskId);
     if (taskIndex === -1) throw new Error('Task not found');
-    data.tasks[taskIndex] = { ...data.tasks[taskIndex], isCompleted: true };
+    data.tasks[taskIndex] = { ...data.tasks[taskIndex], isComplete: true };
     this.databaseService.setData(data);
     const task = data.tasks[taskIndex];
     return task;
