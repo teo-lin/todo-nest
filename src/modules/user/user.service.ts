@@ -8,7 +8,7 @@ import { User } from './entities/user.entity';
 export class UserService {
   constructor(private readonly databaseService: DatabaseService) {}
 
-  async createUser(createUserDto: CreateUserDto) {
+  createUser(createUserDto: CreateUserDto) {
     const data = this.databaseService.getData();
     const nextUserId = `U${1 + Number(data.lastUserId.slice(1))}`;
     const newUser = { userId: nextUserId, ...createUserDto };
@@ -19,7 +19,7 @@ export class UserService {
     return newUser;
   }
 
-  async retrieveUser(userId: string) {
+  retrieveUser(userId: string) {
     const data = this.databaseService.getData();
     const user = data.users.find((user: User) => user.userId === userId);
     if (!user) throw new Error('User not found');
@@ -27,7 +27,7 @@ export class UserService {
     return user;
   }
 
-  async updateUser(userId: string, updateUserDto: UpdateUserDto) {
+  updateUser(userId: string, updateUserDto: UpdateUserDto) {
     const data = this.databaseService.getData();
     const userIndex = data.users.findIndex((user: User) => user.userId === userId);
     if (userIndex === -1) throw new Error('User not found');
@@ -38,7 +38,7 @@ export class UserService {
     return user;
   }
 
-  async deleteUser(userId: string) {
+  deleteUser(userId: string) {
     const data = this.databaseService.getData();
     data.users = data.users.filter((user: User) => user.userId !== userId);
     this.databaseService.setData(data);

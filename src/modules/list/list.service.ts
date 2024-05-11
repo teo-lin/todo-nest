@@ -8,7 +8,7 @@ import { List } from './entities/list.entity';
 export class ListService {
   constructor(private readonly databaseService: DatabaseService) {}
 
-  async createList(createListDto: CreateListDto) {
+  createList(createListDto: CreateListDto) {
     const data = this.databaseService.getData();
     const nextListId = `L${1 + Number(data.lastListId.slice(1))}`;
     const newList = { listId: nextListId, ...createListDto };
@@ -18,14 +18,14 @@ export class ListService {
     return newList;
   }
 
-  async retrieveList(listId: string) {
+  retrieveList(listId: string) {
     const data = this.databaseService.getData();
     const list = data.lists.find((list: List) => list.listId === listId);
     if (!list) throw new Error('List not found');
     return list;
   }
 
-  async updateList(listId: string, updateListDto: UpdateListDto) {
+  updateList(listId: string, updateListDto: UpdateListDto) {
     const data = this.databaseService.getData();
     const listIndex = data.lists.findIndex((list: List) => list.listId === listId);
     if (listIndex === -1) throw new Error('List not found');
@@ -35,7 +35,7 @@ export class ListService {
     return list;
   }
 
-  async deleteList(listId: string) {
+  deleteList(listId: string) {
     const data = this.databaseService.getData();
     data.lists = data.lists.filter((list: List) => list.listId !== listId);
     this.databaseService.setData(data);

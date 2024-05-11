@@ -8,7 +8,7 @@ import { Task } from './entities/task.entity';
 export class TaskService {
   constructor(private readonly databaseService: DatabaseService) {}
 
-  async createTask(createTaskDto: CreateTaskDto) {
+  createTask(createTaskDto: CreateTaskDto) {
     const data = this.databaseService.getData();
     const nextTaskId = `T${1 + Number(data.lastTaskId.slice(1))}`;
     const newTask = { taskId: nextTaskId, ...createTaskDto };
@@ -18,14 +18,14 @@ export class TaskService {
     return newTask;
   }
 
-  async retrieveTask(taskId: string) {
+  retrieveTask(taskId: string) {
     const data = this.databaseService.getData();
     const task = data.tasks.find((task: Task) => task.taskId === taskId);
     if (!task) throw new Error('Task not found');
     return task;
   }
 
-  async updateTask(taskId: string, updateTaskDto: UpdateTaskDto) {
+  updateTask(taskId: string, updateTaskDto: UpdateTaskDto) {
     const data = this.databaseService.getData();
     const taskIndex = data.tasks.findIndex((task: Task) => task.taskId === taskId);
     if (taskIndex === -1) throw new Error('Task not found');
@@ -35,14 +35,14 @@ export class TaskService {
     return task;
   }
 
-  async deleteTask(taskId: string) {
+  deleteTask(taskId: string) {
     const data = this.databaseService.getData();
     data.tasks = data.tasks.filter((task: Task) => task.taskId !== taskId);
     this.databaseService.setData(data);
     return { message: 'Task deleted successfully' };
   }
 
-  async completeTask(taskId: string) {
+  completeTask(taskId: string) {
     const data = this.databaseService.getData();
     const taskIndex = data.tasks.findIndex((task: Task) => task.taskId === taskId);
     if (taskIndex === -1) throw new Error('Task not found');
