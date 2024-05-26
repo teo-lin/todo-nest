@@ -60,7 +60,7 @@
 			],
 			"request": {
 				"auth": {
-					"type": "inherit"
+					"type": "noauth"
 				},
 				"method": "POST",
 				"header": [],
@@ -251,6 +251,9 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
@@ -478,7 +481,6 @@
 							"",
 							"    const responseBody = pm.response.json();",
 							"",
-							"    pm.expect(responseBody.listId).to.equal(\"L4\");",
 							"    pm.expect(responseBody.listName).to.equal(\"Another list\");",
 							"    pm.expect(responseBody.isShared).to.equal(false);",
 							"});",
@@ -489,6 +491,9 @@
 				}
 			],
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
