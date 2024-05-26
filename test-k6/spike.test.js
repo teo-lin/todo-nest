@@ -1,5 +1,5 @@
 import http from 'k6/http';
-const ROOT = 'http://localhost:3333';
+const ROOT = 'http://localhost:3000';
 
 export const options = {
   insecureSkipTLSVerify: true,

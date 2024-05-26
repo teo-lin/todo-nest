@@ -3,7 +3,7 @@ import { check } from 'k6';
 
 const maxTarget = 2000; // max number of concurrent virtual users
 const duration = '1s';
-const endpoint = 'http://localhost:3333/users/user/U1';
+const endpoint = 'http://localhost:3000/users/user/U1';
 const stages = [];
 for (let target = 100; target <= maxTarget; target += 100) {
   stages.push({ duration, target });
