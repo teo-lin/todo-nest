@@ -11,12 +11,12 @@ export class UserService {
   createUser(createUserDto: CreateUserDto) {
     const data = this.databaseService.getData();
     const nextUserId = `U${1 + Number(data.lastUserId.slice(1))}`;
-    const newUser = { userId: nextUserId, ...createUserDto };
-    data.users.push(newUser);
+    const user = { userId: nextUserId, ...createUserDto };
+    data.users.push(user);
     data.lastUserId = nextUserId;
     this.databaseService.setData(data);
-    delete newUser.password;
-    return newUser;
+    delete user.password;
+    return user;
   }
 
   retrieveUser(userId: string) {

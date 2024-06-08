@@ -11,11 +11,11 @@ export class ListService {
   createList(createListDto: CreateListDto) {
     const data = this.databaseService.getData();
     const nextListId = `L${1 + Number(data.lastListId.slice(1))}`;
-    const newList = { listId: nextListId, ...createListDto };
-    data.lists.push(newList);
+    const list = { listId: nextListId, ...createListDto };
+    data.lists.push(list);
     data.lastListId = nextListId;
     this.databaseService.setData(data);
-    return newList;
+    return list;
   }
 
   retrieveList(listId: string) {

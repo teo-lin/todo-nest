@@ -11,11 +11,11 @@ export class TaskService {
   createTask(createTaskDto: CreateTaskDto) {
     const data = this.databaseService.getData();
     const nextTaskId = `T${1 + Number(data.lastTaskId.slice(1))}`;
-    const newTask = { taskId: nextTaskId, ...createTaskDto };
-    data.tasks.push(newTask);
+    const task = { taskId: nextTaskId, ...createTaskDto };
+    data.tasks.push(task);
     data.lastTaskId = nextTaskId;
     this.databaseService.setData(data);
-    return newTask;
+    return task;
   }
 
   retrieveTask(taskId: string) {
