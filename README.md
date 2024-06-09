@@ -1,17 +1,16 @@
 # Barebones Todo App built with multiple frameworks
 
-This repository will contain multiple versions of the same app, so that it can be easily benchmarked later on. The main version will always be the latest version, with all the features. Alternate versions will live in alternate source folders (src-*). A brief description of the alternative is visible as a top folder (beginning with double dot) in each src folder. These are NOT the same as tagged versions, they are forks of the main app. They should normally live in their own repository, but, for learning and comparison purposes, it's easier to host them here.
+This repository will contain multiple versions of the same app, so that it can be easily compared and benchmarked later on. The main version will always be the latest single common denominator among all frameworks analysed, the OOP modular TyperScript implementation (same as src-002). Alternate versions will live in alternate source folders (src-*). A brief description of the alternative is visible as a top folder (beginning with double dot) in each src folder. These are NOT the same as tagged versions, they are forks of the main app. They should normally live in their own repository, but, for learning and comparison purposes, it's easier to host them here.
 
 Base versions, all with in-memory storage:
 
-|          |     | modular | mono<br />(single-file) |                                                                                 |
-| -------- | --- | ------- | ----------------------- | ------------------------------------------------------------------------------- |
-| OOP      | .ts | xx0     | xx1                     | proper DRY Object Oriented Programming, with abstract classes and inheritance   |
-| OOP      | .js | xx2     | xx3                     | same                                                                            |
-| ~~OOP~~ | .js | xx4     | xx5                     | simple OOP, with lots of repeated code, but easier to understand and modularise |
-| FP       | .js | xx6     | xx7                     | Functional Programming versions                                                 |
-| ...      | .?  | xx8     | xx9                     | Framework-specific versions                                                     |
-
+|     |         | modular | mono<br />(single-file) |                                           |
+| --- | ------- | ------- | ----------------------- | ----------------------------------------- |
+| OOP | .js     | xx0     | xx1                     | Object Oriented Programming in JavaScript |
+| OOP | .ts     | xx2     | xx3                     | Object Oriented Programming in TypeScript |
+| FP  | .ts     | xx4     | xx5                     | Functional Programming versions           |
+|     |         | xx6     | xx7                     | ... not yet used                          |
+| OOP | .js/.ts | xx8     | xx9                     | example of bad inheritance implementation |
 
 00x-04x - benchmarking the impact of using various types of hardware resources on performance and speed:
 
@@ -32,7 +31,6 @@ From here on, we'll revert to in-memory storage, to take network, I/O and comput
 * **11x:** middleware: undetermined yet
 * **12x:** documentation: openApi / swagger
 * **13x:** others, I was thinking about testing, but that is pre-production. We'll see.
-
 
 # SETUP
 
