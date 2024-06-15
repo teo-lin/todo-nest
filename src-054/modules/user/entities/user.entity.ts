@@ -1,7 +1,0 @@
-export class User {
-  userId: string;
-  username: string;
-  password: string;
-  fullname: string;
-  isAdmin?: boolean;
-}
