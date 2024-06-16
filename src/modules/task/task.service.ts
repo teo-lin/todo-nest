@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { DatabaseService } from '../database/database.service';
@@ -23,14 +23,14 @@ export class TaskService {
     const data: Database = DatabaseService.getData();
 
     const task: Task | undefined = data.tasks.find((task: Task) => task.taskId === taskId);
-    if (!task) throw new Error('Not Found');
+    if (!task) throw new NotFoundException(`Task not found`);
     else return task;
   }
 
   updateTask(taskId: string, taskData: UpdateTaskDto): Task {
     const data: Database = DatabaseService.getData();
     const taskIndex: number = data.tasks.findIndex((task: any) => task.taskId === taskId);
-    if (taskIndex === -1) throw new Error('Not Found');
+    if (taskIndex === -1) throw new NotFoundException(`Task not found`);
     const task: Task = { ...data.tasks[taskIndex], ...taskData };
 
     data.tasks[taskIndex] = task;
@@ -44,7 +44,7 @@ export class TaskService {
     const totalRecords = data.tasks.length;
 
     data.tasks = data.tasks.filter((task: Task) => task.taskId !== taskId);
-    if (totalRecords === data.tasks.length) throw new Error('Not Found');
+    if (totalRecords === data.tasks.length) throw new NotFoundException(`Task not found`);
     else DatabaseService.setData(data);
   }
 
@@ -52,7 +52,7 @@ export class TaskService {
     const data: Database = DatabaseService.getData();
     const taskIndex: number = data.tasks.findIndex((task: Task) => task.taskId === taskId);
 
-    if (taskIndex === -1) throw new Error('Not Found');
+    if (taskIndex === -1) throw new NotFoundException(`Task not found`);
     else {
       data.tasks[taskIndex].isComplete = true;
       DatabaseService.setData(data);

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { DatabaseService } from '../database/database.service';
@@ -16,41 +16,35 @@ export class UserService {
     data.lastUserId = nextUserId;
     DatabaseService.setData(data);
 
-    return {
-      userId: user.userId,
-      username: user.username,
-      fullname: user.fullname,
-    };
+    /* eslint-disable @typescript-eslint/no-unused-vars */
+    const { password, ...maskedUser } = user;
+    return maskedUser;
   }
 
   retrieveUser(userId: string): MaskedUser {
     const data: Database = DatabaseService.getData();
     const user: User | undefined = data.users.find((user: User) => user.userId === userId);
 
-    if (!user) throw new Error('Not Found');
+    if (!user) throw new NotFoundException(`User not found`);
     else {
-      return {
-        userId: user.userId,
-        username: user.username,
-        fullname: user.fullname,
-      };
+      /* eslint-disable @typescript-eslint/no-unused-vars */
+      const { password, ...maskedUser } = user;
+      return maskedUser;
     }
   }
 
   updateUser(userId: string, userData: UpdateUserDto): MaskedUser {
     const data: Database = DatabaseService.getData();
     const userIndex: number = data.users.findIndex((user: User) => user.userId === userId);
-    if (userIndex === -1) throw new Error('Not Found');
+    if (userIndex === -1) throw new NotFoundException(`User not found`);
     const user: User = { ...data.users[userIndex], ...userData };
 
     data.users[userIndex] = user;
     DatabaseService.setData(data);
 
-    return {
-      userId: user.userId,
-      username: user.username,
-      fullname: user.fullname,
-    };
+    /* eslint-disable @typescript-eslint/no-unused-vars */
+    const { password, ...maskedUser } = user;
+    return maskedUser;
   }
 
   deleteUser(userId: string): void {
@@ -58,7 +52,7 @@ export class UserService {
     const totalRecords = data.users.length;
 
     data.users = data.users.filter((user: User) => user.userId !== userId);
-    if (totalRecords === data.users.length) throw new Error('Not Found');
+    if (totalRecords === data.users.length) throw new NotFoundException(`User not found`);
     else DatabaseService.setData(data);
   }
 }

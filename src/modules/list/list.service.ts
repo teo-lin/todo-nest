@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateListDto } from './dto/create-list.dto';
 import { UpdateListDto } from './dto/update-list.dto';
 import { DatabaseService } from '../database/database.service';
@@ -23,14 +23,14 @@ export class ListService {
     const data: Database = DatabaseService.getData();
 
     const list: List | undefined = data.lists.find((list: List) => list.listId === listId);
-    if (!list) throw new Error('Not Found');
+    if (!list) throw new NotFoundException(`List not found`);
     else return list;
   }
 
   updateList(listId: string, listData: UpdateListDto): List {
     const data: Database = DatabaseService.getData();
     const listIndex: number = data.lists.findIndex((list: any) => list.listId === listId);
-    if (listIndex === -1) throw new Error('Not Found');
+    if (listIndex === -1) throw new NotFoundException(`List not found`);
     const list: List = { ...data.lists[listIndex], ...listData };
 
     data.lists[listIndex] = list;
@@ -44,7 +44,7 @@ export class ListService {
     const totalRecords = data.lists.length;
 
     data.lists = data.lists.filter((list: List) => list.listId !== listId);
-    if (totalRecords === data.lists.length) throw new Error('Not Found');
+    if (totalRecords === data.lists.length) throw new NotFoundException(`List not found`);
     else DatabaseService.setData(data);
   }
 }
