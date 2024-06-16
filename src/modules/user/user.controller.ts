@@ -24,6 +24,7 @@ export class UserController {
 
   @Delete('user/:id')
   deleteUser(@Param('id') id: string) {
-    return this.userService.deleteUser(id);
+    this.userService.deleteUser(id);
+    return { message: 'User deleted successfully' };
   }
 }

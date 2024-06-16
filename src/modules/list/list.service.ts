@@ -3,42 +3,48 @@ import { CreateListDto } from './dto/create-list.dto';
 import { UpdateListDto } from './dto/update-list.dto';
 import { DatabaseService } from '../database/database.service';
 import { List } from './entities/list.entity';
+import { Database } from '../interfaces';
 
 @Injectable()
 export class ListService {
-  constructor(private readonly databaseService: DatabaseService) {}
+  createList(listData: CreateListDto) {
+    const data: Database = DatabaseService.getData();
+    const nextListId: string = `L${1 + Number(data.lastListId.slice(1))}`;
+    const list: List = { listId: nextListId, ...listData };
 
-  createList(createListDto: CreateListDto) {
-    const data = this.databaseService.getData();
-    const nextListId = `L${1 + Number(data.lastListId.slice(1))}`;
-    const list = { listId: nextListId, ...createListDto };
     data.lists.push(list);
     data.lastListId = nextListId;
-    this.databaseService.setData(data);
+    DatabaseService.setData(data);
+
     return list;
   }
 
-  retrieveList(listId: string) {
-    const data = this.databaseService.getData();
-    const list = data.lists.find((list: List) => list.listId === listId);
-    if (!list) throw new Error('List not found');
+  retrieveList(listId: string): List {
+    const data: Database = DatabaseService.getData();
+
+    const list: List | undefined = data.lists.find((list: List) => list.listId === listId);
+    if (!list) throw new Error('Not Found');
+    else return list;
+  }
+
+  updateList(listId: string, listData: UpdateListDto): List {
+    const data: Database = DatabaseService.getData();
+    const listIndex: number = data.lists.findIndex((list: any) => list.listId === listId);
+    if (listIndex === -1) throw new Error('Not Found');
+    const list: List = { ...data.lists[listIndex], ...listData };
+
+    data.lists[listIndex] = list;
+    DatabaseService.setData(data);
+
     return list;
   }
 
-  updateList(listId: string, updateListDto: UpdateListDto) {
-    const data = this.databaseService.getData();
-    const listIndex = data.lists.findIndex((list: List) => list.listId === listId);
-    if (listIndex === -1) throw new Error('List not found');
-    data.lists[listIndex] = { ...data.lists[listIndex], ...updateListDto };
-    this.databaseService.setData(data);
-    const list = data.lists[listIndex];
-    return list;
-  }
+  deleteList(listId: string): void {
+    const data: Database = DatabaseService.getData();
+    const totalRecords = data.lists.length;
 
-  deleteList(listId: string) {
-    const data = this.databaseService.getData();
     data.lists = data.lists.filter((list: List) => list.listId !== listId);
-    this.databaseService.setData(data);
-    return { message: 'List deleted successfully' };
+    if (totalRecords === data.lists.length) throw new Error('Not Found');
+    else DatabaseService.setData(data);
   }
 }

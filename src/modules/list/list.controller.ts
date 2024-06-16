@@ -24,6 +24,7 @@ export class ListController {
 
   @Delete('list/:id')
   deleteList(@Param('id') id: string) {
-    return this.listService.deleteList(id);
+    this.listService.deleteList(id);
+    return { message: 'List deleted successfully' };
   }
 }

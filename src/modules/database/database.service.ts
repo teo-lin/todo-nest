@@ -1,35 +1,26 @@
 import { Injectable } from '@nestjs/common';
 import * as fs from 'fs';
 import * as path from 'path';
+import { Database } from '../interfaces';
 
 @Injectable()
 export class DatabaseService {
-  private db: object;
-  private readonly PATH: string = path.join(process.cwd(), './src/modules/database/db.json');
+  private static db: Database;
+  private static filePath = path.join(__dirname, './db.json');
 
-  constructor() {
-    this.init();
+  static init(): void {
+    this.db = JSON.parse(fs.readFileSync(this.filePath, 'utf8'));
   }
 
-  private init(): void {
-    try {
-      const data = fs.readFileSync(this.PATH, 'utf8');
-      this.db = JSON.parse(data);
-    } catch (error) {
-      console.error('Error initializing database:', error.message);
-      this.db = {};
-    }
-  }
-
-  public getData(): any {
+  static getData(): Database {
     return this.db;
   }
 
-  public setData(data: any): void {
+  static setData(data: Database): void {
     this.db = data;
   }
 
-  public save(): void {
-    fs.writeFileSync(this.PATH, JSON.stringify(this.db), 'utf8');
+  static saveToDisk(): void {
+    fs.writeFileSync(this.filePath, JSON.stringify(this.db), 'utf8');
   }
 }

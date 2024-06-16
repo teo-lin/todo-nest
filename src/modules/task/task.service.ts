@@ -3,52 +3,60 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { DatabaseService } from '../database/database.service';
 import { Task } from './entities/task.entity';
+import { Database } from '../interfaces';
 
 @Injectable()
 export class TaskService {
-  constructor(private readonly databaseService: DatabaseService) {}
+  createTask(taskData: CreateTaskDto): Task {
+    const data: Database = DatabaseService.getData();
+    const nextTaskId: string = `T${1 + Number(data.lastTaskId.slice(1))}`;
+    const task: Task = { taskId: nextTaskId, ...taskData };
 
-  createTask(createTaskDto: CreateTaskDto) {
-    const data = this.databaseService.getData();
-    const nextTaskId = `T${1 + Number(data.lastTaskId.slice(1))}`;
-    const task = { taskId: nextTaskId, ...createTaskDto };
     data.tasks.push(task);
     data.lastTaskId = nextTaskId;
-    this.databaseService.setData(data);
+    DatabaseService.setData(data);
+
     return task;
   }
 
-  retrieveTask(taskId: string) {
-    const data = this.databaseService.getData();
-    const task = data.tasks.find((task: Task) => task.taskId === taskId);
-    if (!task) throw new Error('Task not found');
+  retrieveTask(taskId: string): Task {
+    const data: Database = DatabaseService.getData();
+
+    const task: Task | undefined = data.tasks.find((task: Task) => task.taskId === taskId);
+    if (!task) throw new Error('Not Found');
+    else return task;
+  }
+
+  updateTask(taskId: string, taskData: UpdateTaskDto): Task {
+    const data: Database = DatabaseService.getData();
+    const taskIndex: number = data.tasks.findIndex((task: any) => task.taskId === taskId);
+    if (taskIndex === -1) throw new Error('Not Found');
+    const task: Task = { ...data.tasks[taskIndex], ...taskData };
+
+    data.tasks[taskIndex] = task;
+    DatabaseService.setData(data);
+
     return task;
   }
 
-  updateTask(taskId: string, updateTaskDto: UpdateTaskDto) {
-    const data = this.databaseService.getData();
-    const taskIndex = data.tasks.findIndex((task: Task) => task.taskId === taskId);
-    if (taskIndex === -1) throw new Error('Task not found');
-    data.tasks[taskIndex] = { ...data.tasks[taskIndex], ...updateTaskDto };
-    this.databaseService.setData(data);
-    const task = data.tasks[taskIndex];
-    return task;
-  }
+  deleteTask(taskId: string): void {
+    const data: Database = DatabaseService.getData();
+    const totalRecords = data.tasks.length;
 
-  deleteTask(taskId: string) {
-    const data = this.databaseService.getData();
     data.tasks = data.tasks.filter((task: Task) => task.taskId !== taskId);
-    this.databaseService.setData(data);
-    return { message: 'Task deleted successfully' };
+    if (totalRecords === data.tasks.length) throw new Error('Not Found');
+    else DatabaseService.setData(data);
   }
 
-  completeTask(taskId: string) {
-    const data = this.databaseService.getData();
-    const taskIndex = data.tasks.findIndex((task: Task) => task.taskId === taskId);
-    if (taskIndex === -1) throw new Error('Task not found');
-    data.tasks[taskIndex] = { ...data.tasks[taskIndex], isComplete: true };
-    this.databaseService.setData(data);
-    const task = data.tasks[taskIndex];
-    return task;
+  completeTask(taskId: string): Task {
+    const data: Database = DatabaseService.getData();
+    const taskIndex: number = data.tasks.findIndex((task: Task) => task.taskId === taskId);
+
+    if (taskIndex === -1) throw new Error('Not Found');
+    else {
+      data.tasks[taskIndex].isComplete = true;
+      DatabaseService.setData(data);
+      return data.tasks[taskIndex];
+    }
   }
 }

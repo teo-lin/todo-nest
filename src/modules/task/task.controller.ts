@@ -24,7 +24,8 @@ export class TaskController {
 
   @Delete('task/:id')
   deleteTask(@Param('id') id: string) {
-    return this.taskService.deleteTask(id);
+    this.taskService.deleteTask(id);
+    return { message: 'Task deleted successfully' };
   }
 
   @Patch('task/:id/complete')
